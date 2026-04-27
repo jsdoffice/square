@@ -10,6 +10,7 @@ const closureValue = document.getElementById("closureValue");
 const ratioValue = document.getElementById("ratioValue");
 const straightnessValue = document.getElementById("straightnessValue");
 const cornersValue = document.getElementById("cornersValue");
+const profileValue = document.getElementById("profileValue");
 const evaluateButton = document.getElementById("evaluateButton");
 const clearButton = document.getElementById("clearButton");
 
@@ -122,6 +123,32 @@ function turningAngles(inputPoints) {
   return angles;
 }
 
+function averageSquareBoundaryDistance(rotatedPoints, size) {
+  const half = size / 2;
+  let totalDistance = 0;
+
+  for (const point of rotatedPoints) {
+    const distanceToVerticalSide = Math.abs(Math.abs(point.x) - half);
+    const distanceToHorizontalSide = Math.abs(Math.abs(point.y) - half);
+    totalDistance += Math.min(distanceToVerticalSide, distanceToHorizontalSide);
+  }
+
+  return totalDistance / Math.max(rotatedPoints.length, 1);
+}
+
+function radialProfileScore(inputPoints, center) {
+  const radii = inputPoints.map((point) => distance(point, center));
+  const meanRadius = radii.reduce((sum, value) => sum + value, 0) / Math.max(radii.length, 1);
+  if (meanRadius < 1e-6) {
+    return 0;
+  }
+
+  const variance =
+    radii.reduce((sum, value) => sum + (value - meanRadius) ** 2, 0) / Math.max(radii.length, 1);
+  const normalizedSpread = Math.sqrt(variance) / meanRadius;
+  return clamp(normalizedSpread * 900);
+}
+
 function evaluateSquare(inputPoints) {
   const simplifiedPoints = simplifyPoints(inputPoints);
 
@@ -132,6 +159,7 @@ function evaluateSquare(inputPoints) {
       ratio: 0,
       straightness: 0,
       corners: 0,
+      profile: 0,
       message: "Draw a longer stroke so I can evaluate it.",
     };
   }
@@ -144,6 +172,7 @@ function evaluateSquare(inputPoints) {
       ratio: 0,
       straightness: 0,
       corners: 0,
+      profile: 0,
       message: "The shape is too small. Draw a bigger square.",
     };
   }
@@ -164,23 +193,9 @@ function evaluateSquare(inputPoints) {
   const ratioError = Math.abs(width - height) / size;
   const ratio = clamp(100 - ratioError * 220);
 
-  const straightnessValues = [];
-  for (let i = 0; i < rotated.length - 1; i += 1) {
-    const dx = rotated[i + 1].x - rotated[i].x;
-    const dy = rotated[i + 1].y - rotated[i].y;
-    const segmentLength = Math.hypot(dx, dy);
-    if (segmentLength < 1e-6) {
-      continue;
-    }
-
-    const horizontalScore = Math.abs(dx) / segmentLength;
-    const verticalScore = Math.abs(dy) / segmentLength;
-    straightnessValues.push(Math.max(horizontalScore, verticalScore));
-  }
-
-  const straightness = clamp(
-    (straightnessValues.reduce((sum, value) => sum + value, 0) / Math.max(straightnessValues.length, 1)) * 100,
-  );
+  const averageBoundaryDistance = averageSquareBoundaryDistance(rotated, size);
+  const straightness = clamp(100 - (averageBoundaryDistance / size) * 420);
+  const profile = radialProfileScore(simplifiedPoints, center);
 
   const angleChanges = turningAngles(simplifiedPoints);
   const cornerLike = angleChanges.filter((value) => value >= 55 && value <= 125);
@@ -197,7 +212,9 @@ function evaluateSquare(inputPoints) {
     corners = clamp(cornerQuality);
   }
 
-  const total = clamp((closure + ratio + straightness + corners) / 4);
+  const weightedScore = closure * 0.15 + ratio * 0.15 + straightness * 0.2 + corners * 0.25 + profile * 0.25;
+  const shapeEvidence = Math.sqrt((corners / 100) * (profile / 100));
+  const total = clamp(weightedScore * (0.55 + 0.45 * shapeEvidence));
 
   let message = "Needs improvement. Focus on four clear corners and equal sides.";
   if (total >= 90) {
@@ -214,6 +231,7 @@ function evaluateSquare(inputPoints) {
     ratio,
     straightness,
     corners,
+    profile,
     message,
   };
 }
@@ -263,6 +281,7 @@ function resetResults() {
   ratioValue.textContent = "-";
   straightnessValue.textContent = "-";
   cornersValue.textContent = "-";
+  profileValue.textContent = "-";
 }
 
 function clearDrawing() {
@@ -279,6 +298,7 @@ function updateResults(result) {
   ratioValue.textContent = result.ratio.toFixed(1);
   straightnessValue.textContent = result.straightness.toFixed(1);
   cornersValue.textContent = result.corners.toFixed(1);
+  profileValue.textContent = result.profile.toFixed(1);
 }
 
 function getCanvasPoint(event) {
