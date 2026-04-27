@@ -199,6 +199,45 @@ canvas {
   font-size: 1.1rem;
 }
 
+.corner-panel {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(29, 42, 51, 0.06);
+}
+
+.corner-panel-title {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.corner-angles {
+  display: grid;
+  gap: 8px;
+}
+
+.corner-angle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 253, 248, 0.78);
+}
+
+.corner-angle-row span {
+  color: var(--muted);
+}
+
+.corner-angle-row strong {
+  font-size: 1rem;
+}
+
 @media (max-width: 920px) {
   .workspace {
     grid-template-columns: 1fr;
