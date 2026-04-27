@@ -1,0 +1,239 @@
+:root {
+  --bg: #f3efe5;
+  --panel: rgba(255, 252, 246, 0.88);
+  --panel-strong: #fffdf8;
+  --ink: #1d2a33;
+  --muted: #5f6c74;
+  --line: rgba(29, 42, 51, 0.12);
+  --accent: #d56b2d;
+  --accent-dark: #a54d1f;
+  --shadow: 0 24px 60px rgba(70, 49, 26, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(213, 107, 45, 0.18), transparent 30%),
+    radial-gradient(circle at right 20%, rgba(63, 126, 133, 0.14), transparent 24%),
+    linear-gradient(180deg, #f8f3e8 0%, #efe7d8 100%);
+}
+
+.page {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 56px;
+}
+
+.hero {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent-dark);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  max-width: 780px;
+  font-size: clamp(2.2rem, 4vw, 4.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.intro {
+  max-width: 680px;
+  margin: 16px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.board-card,
+.score-card {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.board-card {
+  padding: 24px;
+}
+
+.board-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.board-top h2,
+.score-card h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.board-top p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.primary {
+  color: white;
+  background: linear-gradient(135deg, #db7a3f 0%, #bb5423 100%);
+  box-shadow: 0 12px 24px rgba(181, 86, 37, 0.28);
+}
+
+.secondary {
+  color: var(--ink);
+  background: rgba(29, 42, 51, 0.08);
+}
+
+.canvas-shell {
+  background:
+    linear-gradient(rgba(55, 67, 76, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(55, 67, 76, 0.05) 1px, transparent 1px),
+    var(--panel-strong);
+  background-size: 40px 40px, 40px 40px, auto;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  touch-action: none;
+}
+
+.score-card {
+  padding: 28px 24px;
+}
+
+.score-label {
+  margin: 0;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.score-value {
+  margin-top: 10px;
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+}
+
+.message {
+  margin: 14px 0 0;
+  min-height: 52px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.metric-list {
+  margin-top: 22px;
+  display: grid;
+  gap: 10px;
+}
+
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(29, 42, 51, 0.06);
+}
+
+.metric span {
+  color: var(--muted);
+}
+
+.metric strong {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 920px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .board-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    width: min(100% - 20px, 1180px);
+    padding: 24px 0 36px;
+  }
+
+  .board-card,
+  .score-card {
+    border-radius: 22px;
+  }
+
+  .board-card {
+    padding: 16px;
+  }
+
+  .score-card {
+    padding: 22px 18px;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  button {
+    flex: 1;
+  }
+}

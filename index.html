@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Square Judge</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">Drawing Accuracy Lab</p>
+        <h1>Draw a square. We score how close it is.</h1>
+        <p class="intro">
+          Use one continuous stroke. The app evaluates closure, balance, straightness, and corner quality.
+        </p>
+      </section>
+
+      <section class="workspace">
+        <div class="board-card">
+          <div class="board-top">
+            <div>
+              <h2>Canvas</h2>
+              <p>Start drawing anywhere inside the board.</p>
+            </div>
+            <div class="actions">
+              <button id="evaluateButton" class="primary">Evaluate</button>
+              <button id="clearButton" class="secondary">Clear</button>
+            </div>
+          </div>
+
+          <div class="canvas-shell">
+            <canvas id="drawingCanvas" width="720" height="720"></canvas>
+          </div>
+        </div>
+
+        <aside class="score-card">
+          <p class="score-label">Square Score</p>
+          <div id="scoreValue" class="score-value">-</div>
+          <p id="message" class="message">Draw a square with one stroke, then press Evaluate.</p>
+
+          <div class="metric-list">
+            <div class="metric">
+              <span>Closure</span>
+              <strong id="closureValue">-</strong>
+            </div>
+            <div class="metric">
+              <span>Ratio</span>
+              <strong id="ratioValue">-</strong>
+            </div>
+            <div class="metric">
+              <span>Straightness</span>
+              <strong id="straightnessValue">-</strong>
+            </div>
+            <div class="metric">
+              <span>Corners</span>
+              <strong id="cornersValue">-</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
